@@ -5,6 +5,13 @@ from sklearn.datasets import load_breast_cancer
 import pandas as pd
 import mlflow
 
+
+
+import dagshub
+dagshub.init(repo_owner='stharajkiran', repo_name='mlops_mlflow', mlflow=True)
+
+mlflow.set_tracking_uri("https://dagshub.com/stharajkiran/mlops_mlflow.mlflow")
+
 # Load the Breast Cancer dataset
 data = load_breast_cancer()
 X = pd.DataFrame(data.data, columns=data.feature_names)
@@ -25,18 +32,7 @@ param_grid = {
 # Applying GridSearchCV
 grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, n_jobs=-1, verbose=2)
 
-# # Run without MLflow from here
-# grid_search.fit(X_train, y_train)
 
-# # Displaying the best params and best score
-# best_params = grid_search.best_params_
-# best_score = grid_search.best_score_
-
-# print(best_params)
-# print(best_score)
-# Till here
-
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment('breast-cancer-rf-hp')
 
 with mlflow.start_run() as parent:
